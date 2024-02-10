@@ -17,6 +17,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -78,6 +79,10 @@ public class NotificationService {
         } catch (ParserConfigurationException | IOException e) {
             throw new RuntimeException("Error parsing Atom feed XML", e);
         }
+    }
+
+    public List<Notification> getAllNotifications() {
+        return notificationRepository.findAll();
     }
 }
 
