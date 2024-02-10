@@ -84,6 +84,7 @@ public class NotificationService {
     private static String parseElement(String atomFeedXml, String elementName) throws Exception {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document = builder.parse(new InputSource(new StringReader(atomFeedXml)));
 
@@ -94,7 +95,6 @@ public class NotificationService {
 
                 NodeList nodes = entryElement.getElementsByTagNameNS("http://www.youtube.com/xml/schemas/2015", elementName);
                 if (nodes.getLength() > 0) {
-                    System.out.println(nodes.item(0).getTextContent());
                     return nodes.item(0).getTextContent();
                 } else {
                     throw new IllegalArgumentException(elementName + " element not found in Atom entry XML");
@@ -102,7 +102,7 @@ public class NotificationService {
             } else {
                 throw new IllegalArgumentException("<entry> element not found in Atom feed XML");
             }
-        } catch (ParserConfigurationException | IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException("Error parsing Atom feed XML", e);
         }
     }
