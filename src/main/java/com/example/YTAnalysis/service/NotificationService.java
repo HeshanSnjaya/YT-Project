@@ -5,10 +5,10 @@ import com.example.YTAnalysis.entity.Notification;
 import com.example.YTAnalysis.repository.NotificationRepository;
 import lombok.*;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import javax.xml.parsers.DocumentBuilder;
@@ -64,22 +64,48 @@ public class NotificationService {
         }
     }
 
+//    private static String parseElement(String atomFeedXml, String elementName) throws Exception {
+//        try {
+//            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//            DocumentBuilder builder = factory.newDocumentBuilder();
+//            Document document = builder.parse(new InputSource(new StringReader(atomFeedXml)));
+//
+//            NodeList nodes = document.getElementsByTagName(elementName);
+//            if (nodes.getLength() > 0) {
+//                return nodes.item(0).getTextContent();
+//            } else {
+//                throw new IllegalArgumentException(elementName + " element not found in Atom feed XML");
+//            }
+//        } catch (ParserConfigurationException | IOException e) {
+//            throw new RuntimeException("Error parsing Atom feed XML", e);
+//        }
+//    }
+
     private static String parseElement(String atomFeedXml, String elementName) throws Exception {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document = builder.parse(new InputSource(new StringReader(atomFeedXml)));
 
-            NodeList nodes = document.getElementsByTagName(elementName);
-            if (nodes.getLength() > 0) {
-                return nodes.item(0).getTextContent();
+            NodeList entryNodes = document.getElementsByTagName("entry");
+            if (entryNodes.getLength() > 0) {
+                // Assuming you want the first <entry>, modify accordingly if needed
+                Element entryElement = (Element) entryNodes.item(0);
+
+                NodeList nodes = entryElement.getElementsByTagNameNS("http://www.youtube.com/xml/schemas/2015", elementName);
+                if (nodes.getLength() > 0) {
+                    return nodes.item(0).getTextContent();
+                } else {
+                    throw new IllegalArgumentException(elementName + " element not found in Atom entry XML");
+                }
             } else {
-                throw new IllegalArgumentException(elementName + " element not found in Atom feed XML");
+                throw new IllegalArgumentException("<entry> element not found in Atom feed XML");
             }
         } catch (ParserConfigurationException | IOException e) {
             throw new RuntimeException("Error parsing Atom feed XML", e);
         }
     }
+
 
     public List<Notification> getAllNotifications() {
         return notificationRepository.findAll();
