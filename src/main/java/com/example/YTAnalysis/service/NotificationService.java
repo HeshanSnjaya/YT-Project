@@ -94,6 +94,7 @@ public class NotificationService {
 
                 NodeList nodes = entryElement.getElementsByTagNameNS("http://www.youtube.com/xml/schemas/2015", elementName);
                 if (nodes.getLength() > 0) {
+                    System.out.println(nodes.item(0).getTextContent());
                     return nodes.item(0).getTextContent();
                 } else {
                     throw new IllegalArgumentException(elementName + " element not found in Atom entry XML");
