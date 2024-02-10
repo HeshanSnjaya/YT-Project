@@ -15,8 +15,8 @@ public class SubscribeController {
 
     private final SubscribeService subscribeService;
 
-    @PostMapping("/subscribe")
-    public ResponseEntity<String>subscribeToPubSub(
+    @PostMapping(value ="/subscribe")
+    public ResponseEntity<?>subscribeToPubSub(
             @RequestParam String channelId,
             @RequestParam String mode
     ){
