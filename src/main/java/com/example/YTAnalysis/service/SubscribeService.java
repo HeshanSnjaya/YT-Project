@@ -15,7 +15,7 @@ public class SubscribeService {
         String subscribeEndpoint = "https://pubsubhubbub.appspot.com/subscribe";
         String topic = "https://www.youtube.com/xml/feeds/videos.xml?channel_id=" + channelId;
         String callback = "https://ytbackend-jftb.onrender.com/api/v1/callback";
-        String verify = "SYNC"; // or "async"
+        String verify = "SYNC"; // or "ASYNC"
         int leaseSeconds = 3600*24*7; // specify the lease duration in seconds
 
         // Set up headers
