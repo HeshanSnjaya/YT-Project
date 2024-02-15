@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class CallbackController {
     private final NotificationService notificationService;
 
-    @RequestMapping(value = "/callback", method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value = "/callbackPoint", method = { RequestMethod.GET, RequestMethod.POST })
     ResponseEntity<?> notification(RequestEntity<String> payload,
                             @RequestParam(value = "hub.challenge", required = false) String hubChallenge) {
         if (StringUtils.hasText(hubChallenge)) {

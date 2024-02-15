@@ -14,7 +14,7 @@ public class SubscribeService {
     public ResponseEntity<String> subscribe(String channelId,String subMode) {
         String subscribeEndpoint = "https://pubsubhubbub.appspot.com/subscribe";
         String topic = "https://www.youtube.com/xml/feeds/videos.xml?channel_id=" + channelId;
-        String callback = "https://ytbackend-jftb.onrender.com/api/v1/callback";
+        String callback = "https://ytbackend-jftb.onrender.com/api/v1/callbackPoint";
         String verify = "SYNC"; // or "ASYNC"
         int leaseSeconds = 3600*24*7; // specify the lease duration in seconds
 
