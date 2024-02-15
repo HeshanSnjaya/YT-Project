@@ -19,8 +19,14 @@ public class ChannelService {
     public void saveChannels(List<String> channelIds) {
         List<Channel> channels = new ArrayList<>();
         for (String channelId : channelIds) {
-            channels.add(new Channel(null, channelId, false));
+            // Check if the channelId already exists in the database
+            if (!channelRepository.existsByChannelId(channelId)) {
+                channels.add(new Channel(null, channelId, false));
+            }
         }
-        channelRepository.saveAll(channels);
+        // Save only the channels that don't already exist
+        if (!channels.isEmpty()) {
+            channelRepository.saveAll(channels);
+        }
     }
 }

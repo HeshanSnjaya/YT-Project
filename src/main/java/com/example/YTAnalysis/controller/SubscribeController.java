@@ -24,6 +24,11 @@ public class SubscribeController {
         return subscribeService.subscribe(channelId,mode);
     }
 
+    @PostMapping(value ="/subscribeAllUnsubscribed")
+    public ResponseEntity<String> subscribeAllUnsubscribed() {
+        return subscribeService.subscribeAllUnsubscribedChannels();
+    }
+
 
 
 }

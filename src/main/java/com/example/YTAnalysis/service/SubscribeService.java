@@ -1,8 +1,11 @@
 package com.example.YTAnalysis.service;
 
+import com.example.YTAnalysis.entity.Channel;
+import com.example.YTAnalysis.repository.ChannelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -12,6 +15,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SubscribeService {
+
+    private final ChannelRepository channelRepository;
 
     public ResponseEntity<String> subscribe(String channelId,String subMode) {
         String subscribeEndpoint = "https://pubsubhubbub.appspot.com/subscribe";
@@ -48,5 +53,16 @@ public class SubscribeService {
 
         return responseEntity;
     }
+    @Transactional
+    public ResponseEntity<String> subscribeAllUnsubscribedChannels() {
+        List<Channel> unsubscribedChannels = channelRepository.findBySubscribeStatusFalse();
+
+        for (Channel channel : unsubscribedChannels) {
+            subscribe(channel.getChannelId(), "subscribe");
+        }
+
+        return ResponseEntity.ok("Subscribed to all unsubscribed channels");
+    }
+
 
 }
