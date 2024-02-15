@@ -23,7 +23,7 @@ public class NotificationController {
         return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
 
-    @PutMapping("/notification/{notificationId}")
+    @PutMapping(value ="/notification/{notificationId}")
     public Notification updateNotification(@PathVariable Long notificationId,
                                            @RequestParam(required = false) Boolean claimable) {
         return notificationService.updateNotification(notificationId, claimable);
