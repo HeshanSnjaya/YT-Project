@@ -20,4 +20,6 @@ public class Notification {
     private String publishedDateTime;
     private String updatedDateTime;
     private OffsetDateTime trackedTime;
+    private Boolean claimable;
+    private Boolean reviewed;
 }

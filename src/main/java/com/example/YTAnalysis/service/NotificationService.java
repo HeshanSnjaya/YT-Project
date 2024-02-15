@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +49,8 @@ public class NotificationService {
             notification.setPublishedDateTime(publishedDate);
             notification.setUpdatedDateTime(updatedDate);
             notification.setTrackedTime(OffsetDateTime.now());
+            notification.setClaimable(false);
+            notification.setReviewed(false);
             notificationRepository.save(notification);
             // Convert to DTO
             NotificationDTO notificationDto = new NotificationDTO();
@@ -83,7 +86,23 @@ public class NotificationService {
 
 
     public List<Notification> getAllNotifications() {
-        return notificationRepository.findAll();
+        return notificationRepository.findByReviewedFalse();
+    }
+
+    public Notification updateNotification(Long notificationId, Boolean claimable) {
+        Optional<Notification> optionalNotification = notificationRepository.findById(notificationId);
+
+        if (optionalNotification.isPresent()) {
+            Notification notification = optionalNotification.get();
+            notification.setReviewed(true);
+            if (claimable != null) {
+                notification.setClaimable(claimable);
+            }
+            return notificationRepository.save(notification);
+        } else {
+            //handle exception
+            return null;
+        }
     }
 }
 

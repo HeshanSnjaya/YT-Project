@@ -5,10 +5,7 @@ import com.example.YTAnalysis.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +21,12 @@ public class NotificationController {
     public ResponseEntity<List<Notification>> getAllNotifications() {
         List<Notification> notifications = notificationService.getAllNotifications();
         return new ResponseEntity<>(notifications, HttpStatus.OK);
+    }
+
+    @PutMapping("/{notificationId}")
+    public Notification updateNotification(@PathVariable Long notificationId,
+                                           @RequestParam(required = false) Boolean claimable) {
+        return notificationService.updateNotification(notificationId, claimable);
     }
 
 }
