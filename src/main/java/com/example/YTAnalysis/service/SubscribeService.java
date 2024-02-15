@@ -51,6 +51,15 @@ public class SubscribeService {
                 String.class
         );
 
+        // If the subscribe operation is successful, set subscribeStatus as true
+        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+            Channel channel = channelRepository.findByChannelId(channelId);
+            if (channel != null) {
+                channel.setSubscribeStatus(true);
+                channelRepository.save(channel);
+            }
+        }
+
         return responseEntity;
     }
     @Transactional

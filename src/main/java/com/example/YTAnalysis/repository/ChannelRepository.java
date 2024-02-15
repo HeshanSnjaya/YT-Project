@@ -9,4 +9,5 @@ public interface ChannelRepository extends JpaRepository<Channel,Long> {
 
     List<Channel> findBySubscribeStatusFalse();
     boolean existsByChannelId(String channelId);
+    Channel findByChannelId(String channelId);
 }
