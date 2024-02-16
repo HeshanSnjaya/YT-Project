@@ -122,7 +122,10 @@ public class NotificationService {
                 notificationRepository.findTop10ByReviewedAndAssignedOrderByNotificationIdAsc(false, false);
 
         // Set the assignedSlot as slotId for each notification
-        unreviewedAndUnassignedNotifications.forEach(notification -> notification.setAssignedSlot(slotId));
+        unreviewedAndUnassignedNotifications.forEach(notification -> {
+            notification.setAssignedSlot(slotId);
+            notification.setAssigned(true);
+        });
         return unreviewedAndUnassignedNotifications;
     }
 
