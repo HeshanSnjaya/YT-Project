@@ -52,7 +52,7 @@ public class SubscribeService {
         );
 
         // If the subscribe operation is successful, set subscribeStatus as true
-        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+        if (responseEntity.getStatusCode().equals(HttpStatus.NO_CONTENT)) {
             Channel channel = channelRepository.findByChannelId(channelId);
             if (channel != null) {
                 channel.setSubscribeStatus(true);
