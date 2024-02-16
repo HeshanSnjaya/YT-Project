@@ -10,6 +10,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,39 +19,40 @@ public class SubscribeService {
     private final ChannelRepository channelRepository;
 
     public ResponseEntity<String> subscribe(String channelId,String subMode) {
-        String subscribeEndpoint = "https://pubsubhubbub.appspot.com/subscribe";
-        String topic = "https://www.youtube.com/xml/feeds/videos.xml?channel_id=" + channelId;
-        String callback = "https://ytbackend-jftb.onrender.com/api/v1/callbackPoint";
-        String verify = "SYNC"; // or "ASYNC"
-        int leaseSeconds = 3600*24*7; // specify the lease duration in seconds
 
-        // Set up headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+                String subscribeEndpoint = "https://pubsubhubbub.appspot.com/subscribe";
+                String topic = "https://www.youtube.com/xml/feeds/videos.xml?channel_id=" + channelId;
+                String callback = "https://ytbackend-jftb.onrender.com/api/v1/callbackPoint";
+                String verify = "SYNC"; // or "ASYNC"
+                int leaseSeconds = 3600 * 24 * 7; // specify the lease duration in seconds
 
-        // Set up request body with query parameters
-        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
-        requestBody.add("hub.topic", topic);
-        requestBody.add("hub.callback", callback);
-        requestBody.add("hub.verify", verify);
-        requestBody.add("hub.mode", subMode);
-        requestBody.add("hub.lease_seconds", String.valueOf(leaseSeconds));
+                // Set up headers
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        // Set up the request entity
-        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+                // Set up request body with query parameters
+                MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+                requestBody.add("hub.topic", topic);
+                requestBody.add("hub.callback", callback);
+                requestBody.add("hub.verify", verify);
+                requestBody.add("hub.mode", subMode);
+                requestBody.add("hub.lease_seconds", String.valueOf(leaseSeconds));
 
-        // Create a RestTemplate
-        RestTemplate restTemplate = new RestTemplate();
+                // Set up the request entity
+                HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
 
-        // Send the POST request
-        ResponseEntity<String> responseEntity = restTemplate.exchange(
-                subscribeEndpoint,
-                HttpMethod.POST,
-                requestEntity,
-                String.class
-        );
+                // Create a RestTemplate
+                RestTemplate restTemplate = new RestTemplate();
 
-        return responseEntity;
+                // Send the POST request
+                ResponseEntity<String> responseEntity = restTemplate.exchange(
+                        subscribeEndpoint,
+                        HttpMethod.POST,
+                        requestEntity,
+                        String.class
+                );
+
+                return responseEntity;
     }
 
     public ResponseEntity<String> subscribeAllUnsubscribedChannels() {
