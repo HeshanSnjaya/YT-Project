@@ -8,7 +8,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import javax.xml.parsers.DocumentBuilder;
@@ -115,12 +114,12 @@ public class NotificationService {
         if (indexOfT != -1) {
             return fullDate.substring(0, indexOfT);
         }
-        return fullDate; // Handle cases where 'T' is not present
+        return fullDate;
     }
 
     public List<Notification> getTop10UnreviewedAndUnassignedNotifications(Integer slotId) {
         List<Notification> unreviewedAndUnassignedNotifications =
-                notificationRepository.findTop10ByReviewedAndAssigned(false, false);
+                notificationRepository.findTop10ByReviewedAndAssignedOrderByNotificationIdAsc(false, false);
 
         // Set the assignedSlot as slotId for each notification
         unreviewedAndUnassignedNotifications.forEach(notification -> notification.setAssignedSlot(slotId));
