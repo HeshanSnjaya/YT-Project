@@ -116,5 +116,26 @@ public class NotificationService {
         }
         return fullDate; // Handle cases where 'T' is not present
     }
+
+    public List<Notification> getTop10UnreviewedAndUnassignedNotifications(Integer slotId) {
+        List<Notification> unreviewedAndUnassignedNotifications =
+                notificationRepository.findTop10ByReviewedAndAssigned(false, false);
+
+        // Set the assignedSlot as slotId for each notification
+        unreviewedAndUnassignedNotifications.forEach(notification -> notification.setAssignedSlot(slotId));
+        return unreviewedAndUnassignedNotifications;
+    }
+
+    public void updateNotificationsBySlotId(Integer slotId) {
+        List<Notification> notificationsToUpdate =
+                notificationRepository.findByReviewedAndAssignedAndAssignedSlot(false, true, slotId);
+
+        notificationsToUpdate.forEach(notification -> {
+            notification.setAssigned(false);
+            notification.setAssignedSlot(null);
+        });
+
+        notificationRepository.saveAll(notificationsToUpdate);
+    }
 }
 

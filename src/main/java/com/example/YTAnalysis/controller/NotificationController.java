@@ -29,4 +29,17 @@ public class NotificationController {
         return notificationService.updateNotification(notificationId, claimable);
     }
 
+    @GetMapping(value ="/notification/request/{slotId}")
+    public ResponseEntity<List<Notification>> getTop10UnreviewedAndUnassignedNotifications(
+            @PathVariable Integer slotId) {
+        List<Notification> notifications = notificationService.getTop10UnreviewedAndUnassignedNotifications(slotId);
+        return ResponseEntity.ok(notifications);
+    }
+
+    @PutMapping(value ="/notification/update-by-slot")
+    public ResponseEntity<String> updateNotificationsBySlotId(@RequestParam Integer slotId) {
+        notificationService.updateNotificationsBySlotId(slotId);
+        return ResponseEntity.ok("Notifications updated successfully.");
+    }
+
 }
