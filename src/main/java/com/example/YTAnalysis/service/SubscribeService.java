@@ -5,6 +5,7 @@ import com.example.YTAnalysis.repository.ChannelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@EnableTransactionManagement
 public class SubscribeService {
 
     private final ChannelRepository channelRepository;
@@ -75,6 +77,7 @@ public class SubscribeService {
 //                }
                 channel.setSubscribeStatus(true);
                 channelRepository.save(channel);
+                System.out.println("Channel subscription successful: "+channel.getChannelId());
             }
             catch(Exception e){
                 channel.setSubscribeStatus(false);
