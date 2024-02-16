@@ -42,7 +42,7 @@ public class NotificationController {
         return ResponseEntity.ok("Notifications updated successfully.");
     }
 
-    @GetMapping("/by-slot/{slotId}")
+    @GetMapping(value ="/notification/by-slot/{slotId}")
     public ResponseEntity<List<Notification>> getNotificationsBySlotId(@PathVariable Integer slotId) {
         List<Notification> notifications = notificationService.getNotificationsBySlotId(slotId);
         return ResponseEntity.ok(notifications);
