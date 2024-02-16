@@ -22,4 +22,6 @@ public class Notification {
     private OffsetDateTime trackedTime;
     private Boolean claimable;
     private Boolean reviewed;
+    private Boolean assigned;
+    private Integer assignedSlot;
 }

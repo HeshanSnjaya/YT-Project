@@ -40,6 +40,9 @@ public class NotificationService {
                 // Video ID already exists, do not add it again
                 System.out.println("Video Id is already in database and not a new video");
                 return ResponseEntity.status(204).build();
+            } else if (!extractDatePart(publishedDate).equals(extractDatePart(updatedDate))) {
+                System.out.println("this is a newly updated old video");
+                return ResponseEntity.status(204).build();
             }
             // Save to the database
             Notification notification = new Notification();
@@ -82,6 +85,7 @@ public class NotificationService {
         } catch (ParserConfigurationException | IOException e) {
             throw new RuntimeException("Error parsing Atom feed XML", e);
         }
+
     }
 
 
@@ -103,6 +107,14 @@ public class NotificationService {
             //handle exception
             return null;
         }
+    }
+
+    private static String extractDatePart(String fullDate) {
+        int indexOfT = fullDate.indexOf('T');
+        if (indexOfT != -1) {
+            return fullDate.substring(0, indexOfT);
+        }
+        return fullDate; // Handle cases where 'T' is not present
     }
 }
 
