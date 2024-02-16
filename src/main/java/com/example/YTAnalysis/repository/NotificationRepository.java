@@ -9,6 +9,7 @@ public interface NotificationRepository extends JpaRepository<Notification,Long>
     boolean existsByVideoId(String videoId);
     List<Notification> findByReviewedFalse();
 
+    List<Notification> findTop100ByReviewedFalseOrderByNotificationIdDesc();
     List<Notification> findTop10ByReviewedAndAssignedOrderByNotificationIdAsc(Boolean reviewed, Boolean assigned);
     List<Notification> findByReviewedAndAssignedAndAssignedSlotOrderByNotificationIdAsc(Boolean reviewed, Boolean assigned, Integer assignedSlot);
 

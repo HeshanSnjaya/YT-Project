@@ -90,7 +90,7 @@ public class NotificationService {
 
 
     public List<Notification> getAllNotifications() {
-        return notificationRepository.findByReviewedFalse();
+        return notificationRepository.findTop100ByReviewedFalseOrderByNotificationIdDesc();
     }
 
     public Notification updateNotification(Long notificationId, Boolean claimable) {
