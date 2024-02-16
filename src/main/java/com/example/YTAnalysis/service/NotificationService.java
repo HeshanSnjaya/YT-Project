@@ -121,11 +121,12 @@ public class NotificationService {
         List<Notification> unreviewedAndUnassignedNotifications =
                 notificationRepository.findTop10ByReviewedAndAssignedOrderByNotificationIdAsc(false, false);
 
-        // Set the assignedSlot as slotId for each notification
+        // Set the assignedSlot as slotId and assigned as true for each notification
         unreviewedAndUnassignedNotifications.forEach(notification -> {
             notification.setAssignedSlot(slotId);
             notification.setAssigned(true);
         });
+        notificationRepository.saveAll(unreviewedAndUnassignedNotifications);
         return unreviewedAndUnassignedNotifications;
     }
 
@@ -137,7 +138,6 @@ public class NotificationService {
             notification.setAssigned(false);
             notification.setAssignedSlot(null);
         });
-
         notificationRepository.saveAll(notificationsToUpdate);
     }
 }
