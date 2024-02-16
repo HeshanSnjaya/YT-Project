@@ -132,7 +132,7 @@ public class NotificationService {
 
     public void updateNotificationsBySlotId(Integer slotId) {
         List<Notification> notificationsToUpdate =
-                notificationRepository.findByReviewedAndAssignedAndAssignedSlot(false, true, slotId);
+                notificationRepository.findByReviewedAndAssignedAndAssignedSlotOrderOrderByNotificationIdAsc(false, true, slotId);
 
         notificationsToUpdate.forEach(notification -> {
             notification.setAssigned(false);
@@ -142,7 +142,7 @@ public class NotificationService {
     }
 
     public List<Notification> getNotificationsBySlotId(Integer slotId) {
-        return notificationRepository.findByReviewedAndAssignedAndAssignedSlot(false, true, slotId);
+        return notificationRepository.findByReviewedAndAssignedAndAssignedSlotOrderOrderByNotificationIdAsc(false, true, slotId);
     }
 }
 
