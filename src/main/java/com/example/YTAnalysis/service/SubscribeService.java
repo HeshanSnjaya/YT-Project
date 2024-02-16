@@ -5,8 +5,6 @@ import com.example.YTAnalysis.repository.ChannelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -15,7 +13,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@EnableTransactionManagement
 public class SubscribeService {
 
     private final ChannelRepository channelRepository;
@@ -53,38 +50,24 @@ public class SubscribeService {
                 String.class
         );
 
-        // If the subscribe operation is successful, set subscribeStatus as true
-//        if (responseEntity.getStatusCode().equals(HttpStatus.NO_CONTENT)) {
-//            Channel channel = channelRepository.findByChannelId(channelId);
-//            if (channel != null) {
-//                channel.setSubscribeStatus(true);
-//                channelRepository.save(channel);
-//            }
-//        }
-
         return responseEntity;
     }
-    @Transactional
+
     public ResponseEntity<String> subscribeAllUnsubscribedChannels() {
         List<Channel> unsubscribedChannels = channelRepository.findBySubscribeStatusFalse();
 
         for (Channel channel : unsubscribedChannels) {
             try{
                 subscribe(channel.getChannelId(), "subscribe");
-//                if (response.getStatusCode().equals(HttpStatus.NO_CONTENT)) {
-//                    channel.setSubscribeStatus(true);
-//                    channelRepository.save(channel);
-//                }
                 channel.setSubscribeStatus(true);
-                channelRepository.save(channel);
                 System.out.println("Channel subscription successful: "+channel.getChannelId());
             }
             catch(Exception e){
                 channel.setSubscribeStatus(false);
-                channelRepository.save(channel);
                 System.out.println("Channel subscription failed: "+channel.getChannelId());
                 e.printStackTrace();
             }
+            channelRepository.save(channel);
 
         }
 
