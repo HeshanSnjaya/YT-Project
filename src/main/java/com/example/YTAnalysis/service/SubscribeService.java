@@ -67,10 +67,21 @@ public class SubscribeService {
         List<Channel> unsubscribedChannels = channelRepository.findBySubscribeStatusFalse();
 
         for (Channel channel : unsubscribedChannels) {
-            subscribe(channel.getChannelId(), "subscribe");
+            try{
+                ResponseEntity<String>response=subscribe(channel.getChannelId(), "subscribe");
+                if (response.getStatusCode().equals(HttpStatus.NO_CONTENT)) {
+                    channel.setSubscribeStatus(true);
+                    channelRepository.save(channel);
+                }
+            }
+            catch(Exception e){
+                System.out.println("Channel subscription failed: "+channel.getChannelId());
+                e.printStackTrace();
+            }
+
         }
 
-        return ResponseEntity.ok("Subscribed to all unsubscribed channels");
+        return ResponseEntity.ok("Subscribed to all possible unsubscribed channels");
     }
 
 
