@@ -10,6 +10,6 @@ public interface NotificationRepository extends JpaRepository<Notification,Long>
     List<Notification> findByReviewedFalse();
 
     List<Notification> findTop10ByReviewedAndAssignedOrderByNotificationIdAsc(Boolean reviewed, Boolean assigned);
-    List<Notification> findByReviewedAndAssignedAndAssignedSlotOrderOrderByNotificationIdAsc(Boolean reviewed, Boolean assigned, Integer assignedSlot);
+    List<Notification> findByReviewedAndAssignedAndAssignedSlotOrderByNotificationIdAsc(Boolean reviewed, Boolean assigned, Integer assignedSlot);
 
 }
