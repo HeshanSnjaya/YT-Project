@@ -117,7 +117,7 @@ public class NotificationService {
         return fullDate;
     }
 
-    public List<Notification> getTop10UnreviewedAndUnassignedNotifications(Integer slotId) {
+    public List<Notification> addTop10UnreviewedAndUnassignedNotifications(Integer slotId) {
         List<Notification> unreviewedAndUnassignedNotifications =
                 notificationRepository.findTop10ByReviewedAndAssignedOrderByNotificationIdAsc(false, false);
 
@@ -139,6 +139,10 @@ public class NotificationService {
             notification.setAssignedSlot(null);
         });
         notificationRepository.saveAll(notificationsToUpdate);
+    }
+
+    public List<Notification> getNotificationsBySlotId(Integer slotId) {
+        return notificationRepository.findByReviewedAndAssignedAndAssignedSlot(false, true, slotId);
     }
 }
 
