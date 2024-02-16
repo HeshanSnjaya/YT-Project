@@ -54,6 +54,7 @@ public class NotificationService {
             notification.setTrackedTime(OffsetDateTime.now());
             notification.setClaimable(false);
             notification.setReviewed(false);
+            notification.setAssigned(false);
             notificationRepository.save(notification);
             // Convert to DTO
             NotificationDTO notificationDto = new NotificationDTO();
