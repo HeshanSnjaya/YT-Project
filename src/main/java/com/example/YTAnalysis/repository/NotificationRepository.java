@@ -8,7 +8,7 @@ import java.util.List;
 public interface NotificationRepository extends JpaRepository<Notification,Long> {
     boolean existsByVideoId(String videoId);
     List<Notification> findTop100ByReviewedFalseAndArchivedFalseOrderByNotificationIdDesc();
-    List<Notification> findTop10ByReviewedTrueAndAssignedTrueAndArchivedFalseOrderByNotificationIdDesc(Boolean reviewed, Boolean assigned);
+    List<Notification> findTop10ByReviewedFalseAndAssignedFalseAndArchivedFalseOrderByNotificationIdDesc();
     List<Notification> findByReviewedAndAssignedAndAssignedSlotAndArchivedFalseOrderByNotificationIdDesc(Boolean reviewed, Boolean assigned, Integer assignedSlot);
 
     // Find notifications where reviewed is false and archived is true

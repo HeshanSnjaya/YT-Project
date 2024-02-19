@@ -119,7 +119,7 @@ public class NotificationService {
 
     public List<Notification> addTop10UnreviewedAndUnassignedNotifications(Integer slotId) {
         List<Notification> unreviewedAndUnassignedNotifications =
-                notificationRepository.findTop10ByReviewedTrueAndAssignedTrueAndArchivedFalseOrderByNotificationIdDesc(false, false);
+                notificationRepository.findTop10ByReviewedFalseAndAssignedFalseAndArchivedFalseOrderByNotificationIdDesc();
 
         // Set the assignedSlot as slotId and assigned as true for each notification
         unreviewedAndUnassignedNotifications.forEach(notification -> {
