@@ -24,4 +24,5 @@ public class Notification {
     private Boolean reviewed;
     private Boolean assigned;
     private Integer assignedSlot;
+    private Boolean archived;
 }

@@ -23,6 +23,12 @@ public class NotificationController {
         return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
 
+    @GetMapping(value="/notification/archived")
+    public ResponseEntity<List<Notification>> getUnreviewedAndArchivedNotifications() {
+        List<Notification> notifications = notificationService.getUnreviewedAndArchivedNotifications();
+        return new ResponseEntity<>(notifications, HttpStatus.OK);
+    }
+
     @PutMapping(value ="/notification/{notificationId}")
     public Notification updateNotification(@PathVariable Long notificationId,
                                            @RequestParam(required = false) Boolean claimable) {
@@ -34,6 +40,11 @@ public class NotificationController {
             @PathVariable Integer slotId) {
         List<Notification> notifications = notificationService.addTop10UnreviewedAndUnassignedNotifications(slotId);
         return ResponseEntity.ok(notifications);
+    }
+
+    @PutMapping(value="/notification/archive/{notificationId}")
+    public ResponseEntity<String> archiveNotification(@PathVariable Long notificationId) {
+        return notificationService.archiveNotification(notificationId);
     }
 
     @PutMapping(value ="/notification/update-by-slot")

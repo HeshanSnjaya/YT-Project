@@ -90,7 +90,7 @@ public class NotificationService {
 
 
     public List<Notification> getAllNotifications() {
-        return notificationRepository.findTop100ByReviewedFalseOrderByNotificationIdDesc();
+        return notificationRepository.findTop100ByReviewedFalseAndArchivedFalseOrderByNotificationIdDesc();
     }
 
     public Notification updateNotification(Long notificationId, Boolean claimable) {
@@ -119,7 +119,7 @@ public class NotificationService {
 
     public List<Notification> addTop10UnreviewedAndUnassignedNotifications(Integer slotId) {
         List<Notification> unreviewedAndUnassignedNotifications =
-                notificationRepository.findTop10ByReviewedAndAssignedOrderByNotificationIdAsc(false, false);
+                notificationRepository.findTop10ByReviewedAndAssignedTrueAndArchivedFalseOrderByNotificationIdDesc(false, false);
 
         // Set the assignedSlot as slotId and assigned as true for each notification
         unreviewedAndUnassignedNotifications.forEach(notification -> {
@@ -132,7 +132,7 @@ public class NotificationService {
 
     public void updateNotificationsBySlotId(Integer slotId) {
         List<Notification> notificationsToUpdate =
-                notificationRepository.findByReviewedAndAssignedAndAssignedSlotOrderByNotificationIdAsc(false, true, slotId);
+                notificationRepository.findByReviewedAndAssignedAndAssignedSlotAndArchivedFalseOrderByNotificationIdDesc(false, true, slotId);
 
         notificationsToUpdate.forEach(notification -> {
             notification.setAssigned(false);
@@ -142,7 +142,30 @@ public class NotificationService {
     }
 
     public List<Notification> getNotificationsBySlotId(Integer slotId) {
-        return notificationRepository.findByReviewedAndAssignedAndAssignedSlotOrderByNotificationIdAsc(false, true, slotId);
+        return notificationRepository.findByReviewedAndAssignedAndAssignedSlotAndArchivedFalseOrderByNotificationIdDesc(false, true, slotId);
+    }
+
+    public ResponseEntity<String> archiveNotification(Long notificationId) {
+        // Check if the notification with the given ID exists
+        if (notificationRepository.existsById(notificationId)) {
+            // Get the notification by ID
+            Notification notification = notificationRepository.findById(notificationId).orElse(null);
+
+            // Set archived as true
+            if (notification != null) {
+                notification.setArchived(true);
+                notificationRepository.save(notification);
+                return ResponseEntity.ok("Notification archived successfully");
+            } else {
+                return ResponseEntity.badRequest().body("Notification not found");
+            }
+        } else {
+            return ResponseEntity.badRequest().body("Notification not found");
+        }
+    }
+
+    public List<Notification> getUnreviewedAndArchivedNotifications() {
+        return notificationRepository.findByReviewedFalseAndArchivedTrue();
     }
 }
 
