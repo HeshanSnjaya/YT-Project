@@ -54,6 +54,7 @@ public class NotificationService {
             notification.setClaimable(false);
             notification.setReviewed(false);
             notification.setAssigned(false);
+            notification.setArchived(false);
             notificationRepository.save(notification);
             // Convert to DTO
             NotificationDTO notificationDto = new NotificationDTO();
