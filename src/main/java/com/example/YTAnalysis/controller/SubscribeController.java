@@ -22,12 +22,10 @@ public class SubscribeController {
 
     @PostMapping(value ="/subscribe")
     public ResponseEntity<?>subscribeToPubSub(
-            @RequestParam String channelId){
-        // Create an empty list to store channel IDs
-        List<String> channelList = new ArrayList<>();
-        channelList.add(channelId);
-        channelService.saveChannels(channelList);
-        return subscribeService.subscribeAllUnsubscribedChannels();
+            @RequestParam String channelId,
+            @RequestParam String mode){
+        return subscribeService.subscribeUnsubscribeChannel(channelId,mode);
+
     }
 
     @PostMapping(value ="/subscribeAllUnsubscribed")

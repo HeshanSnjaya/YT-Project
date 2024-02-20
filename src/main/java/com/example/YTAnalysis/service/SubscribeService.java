@@ -9,14 +9,15 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class SubscribeService {
 
     private final ChannelRepository channelRepository;
+    private final ChannelService channelService;
 
     public ResponseEntity<String> subscribe(String channelId,String subMode) {
 
@@ -74,6 +75,34 @@ public class SubscribeService {
         }
 
         return ResponseEntity.ok("Subscribed to all possible unsubscribed channels");
+    }
+
+    public ResponseEntity<String> subscribeUnsubscribeChannel(String channelId,String subMode){
+        if(subMode.equals("subscribe")){
+            if (!channelRepository.existsByChannelId(channelId)){
+                List<String> channelList = new ArrayList<>();
+                channelList.add(channelId);
+                channelService.saveChannels(channelList);
+                subscribe(channelId,subMode);
+                Channel channel=channelRepository.findByChannelId(channelId);
+                channel.setSubscribeStatus(true);
+                return ResponseEntity.ok("channel is successfully subscribed");
+            }
+            else {
+                return ResponseEntity.badRequest().body("Channel is already subscribed");
+            }
+        } else if (subMode.equals("unsubscribe")) {
+            if (channelRepository.existsByChannelId(channelId)){
+                subscribe(channelId,subMode);
+                return ResponseEntity.ok("channel is unsubscribed");
+            }
+            else {
+                return ResponseEntity.badRequest().body("Channel is not in the list");
+            }
+        }else{
+            return ResponseEntity.badRequest().body("Invalid Sub Mode");
+        }
+
     }
 
 
