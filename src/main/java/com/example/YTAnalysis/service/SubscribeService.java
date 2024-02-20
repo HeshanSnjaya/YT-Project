@@ -79,7 +79,7 @@ public class SubscribeService {
 
     public ResponseEntity<String> subscribeUnsubscribeChannel(String channelId,String subMode){
         if(subMode.equals("subscribe")){
-            if (!channelRepository.existsByChannelIdAndExistTrue(channelId)){
+            if (!channelRepository.existsByChannelId(channelId)){
                 List<String> channelList = new ArrayList<>();
                 channelList.add(channelId);
                 channelService.saveChannels(channelList);
@@ -90,11 +90,19 @@ public class SubscribeService {
                 channelRepository.save(channel);
                 return ResponseEntity.ok("channel is successfully subscribed");
             }
-            else {
+            else if(channelRepository.existsByChannelIdAndExist(channelId,false)) {
+                Channel channel=channelRepository.findByChannelId(channelId);
+                subscribe(channelId,subMode);
+                channel.setSubscribeStatus(true);
+                channel.setExist(true);
+                channelRepository.save(channel);
+                return ResponseEntity.ok("channel is successfully subscribed");
+            }
+            else{
                 return ResponseEntity.badRequest().body("Channel is already subscribed");
             }
         } else if (subMode.equals("unsubscribe")) {
-            if (channelRepository.existsByChannelIdAndExistTrue(channelId)){
+            if (channelRepository.existsByChannelIdAndExist(channelId,true)){
                 System.out.println("going to unsubscribe");
                 subscribe(channelId,subMode);
                 System.out.println("unsubscribed");

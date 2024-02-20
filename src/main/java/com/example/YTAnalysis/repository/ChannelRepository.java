@@ -9,7 +9,8 @@ import java.util.Optional;
 public interface ChannelRepository extends JpaRepository<Channel,Long> {
 
     List<Channel> findBySubscribeStatusFalseAndExistTrue();
-    boolean existsByChannelIdAndExistTrue(String channelId);
+    boolean existsByChannelIdAndExist(String channelId,Boolean exist);
+    boolean existsByChannelId(String channelId);
     Channel findByChannelId(String channelId);
 
     // Delete channel by channelId
