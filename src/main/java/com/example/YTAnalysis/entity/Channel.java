@@ -18,4 +18,5 @@ public class Channel {
     private Long channelNo;
     private String channelId;
     private Boolean subscribeStatus;
+    private Boolean exist;
 }

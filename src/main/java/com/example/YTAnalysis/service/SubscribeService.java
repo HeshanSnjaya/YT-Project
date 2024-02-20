@@ -57,7 +57,7 @@ public class SubscribeService {
     }
 
     public ResponseEntity<String> subscribeAllUnsubscribedChannels() {
-        List<Channel> unsubscribedChannels = channelRepository.findBySubscribeStatusFalse();
+        List<Channel> unsubscribedChannels = channelRepository.findBySubscribeStatusFalseAndExistTrue();
 
         for (Channel channel : unsubscribedChannels) {
             try{
@@ -79,25 +79,30 @@ public class SubscribeService {
 
     public ResponseEntity<String> subscribeUnsubscribeChannel(String channelId,String subMode){
         if(subMode.equals("subscribe")){
-            if (!channelRepository.existsByChannelId(channelId)){
+            if (!channelRepository.existsByChannelIdAndExistTrue(channelId)){
                 List<String> channelList = new ArrayList<>();
                 channelList.add(channelId);
                 channelService.saveChannels(channelList);
                 subscribe(channelId,subMode);
                 Channel channel=channelRepository.findByChannelId(channelId);
                 channel.setSubscribeStatus(true);
+                channel.setExist(true);
+                channelRepository.save(channel);
                 return ResponseEntity.ok("channel is successfully subscribed");
             }
             else {
                 return ResponseEntity.badRequest().body("Channel is already subscribed");
             }
         } else if (subMode.equals("unsubscribe")) {
-            if (channelRepository.existsByChannelId(channelId)){
+            if (channelRepository.existsByChannelIdAndExistTrue(channelId)){
                 System.out.println("going to unsubscribe");
                 subscribe(channelId,subMode);
                 System.out.println("unsubscribed");
-                channelRepository.deleteByChannelId(channelId);
-                System.out.println("channel is deleted");
+                Channel channel=channelRepository.findByChannelId(channelId);
+                channel.setSubscribeStatus(false);
+                channel.setExist(false);
+                channelRepository.save(channel);
+                System.out.println("channel is removed");
                 return ResponseEntity.ok("channel is unsubscribed and removed");
             }
             else {
