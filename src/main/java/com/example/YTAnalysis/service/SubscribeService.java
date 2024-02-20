@@ -94,7 +94,8 @@ public class SubscribeService {
         } else if (subMode.equals("unsubscribe")) {
             if (channelRepository.existsByChannelId(channelId)){
                 subscribe(channelId,subMode);
-                return ResponseEntity.ok("channel is unsubscribed");
+                channelRepository.deleteByChannelId(channelId);
+                return ResponseEntity.ok("channel is unsubscribed and removed");
             }
             else {
                 return ResponseEntity.badRequest().body("Channel is not in the list");
