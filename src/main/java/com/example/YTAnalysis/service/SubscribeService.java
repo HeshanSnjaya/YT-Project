@@ -94,7 +94,10 @@ public class SubscribeService {
         } else if (subMode.equals("unsubscribe")) {
             if (channelRepository.existsByChannelId(channelId)){
                 subscribe(channelId,subMode);
+                System.out.println("going to subscribe");
+                System.out.println("unsubscribed");
                 channelRepository.deleteByChannelId(channelId);
+                System.out.println("channel is deleted");
                 return ResponseEntity.ok("channel is unsubscribed and removed");
             }
             else {
